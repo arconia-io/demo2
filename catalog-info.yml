@@ -1,0 +1,16 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo2
+  description: LLM-powered application with RAG capabilities.
+  annotations:
+    backstage.io/kubernetes-id: demo2
+    backstage.io/techdocs-ref: dir:.
+    endoflife.date/products: spring-boot
+    github.com/project-slug: arconia-io/demo2
+    sonarqube.org/project-key: arconia-io_demo2
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/arconia

@@ -1,0 +1,85 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.0-M3'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.cyclonedx.bom' version '1.10.0'
+	id 'org.sonarqube' version '5.1.0.4882'
+}
+
+group = 'io.kadras'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(23)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+ext {
+	set('otelInstrumentationVersion', "2.9.0-alpha")
+	set('springAiVersion', "1.0.0-SNAPSHOT")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+	implementation 'io.micrometer:micrometer-registry-otlp'
+	implementation 'io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0'
+
+	
+	
+	implementation 'org.springframework.ai:spring-ai-ollama-spring-boot-starter'
+	testImplementation 'org.testcontainers:ollama'
+	
+	
+	
+	implementation 'org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter'
+	testImplementation 'org.testcontainers:postgresql'
+	
+	implementation "org.springframework.ai:spring-ai-spring-cloud-bindings"
+
+	testAndDevelopmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.springframework.ai:spring-ai-spring-boot-testcontainers'
+	testImplementation 'org.springframework:spring-webflux'
+	testImplementation 'org.testcontainers:grafana'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:${otelInstrumentationVersion}"
+		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.named('bootBuildImage') {
+	builder = "paketobuildpacks/builder-noble-java-tiny"
+}
+
+sonar {
+	properties {
+		property "sonar.projectKey", "arconia-io_demo2"
+		property "sonar.organization", "arconia-io"
+		property "sonar.host.url", "https://sonarcloud.io"
+	}
+}
