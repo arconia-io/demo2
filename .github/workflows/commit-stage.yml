@@ -55,7 +55,6 @@ jobs:
       
       - name: Publish SBOM
         uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5 # v3.1.0
-        if: NaN
         with:
           serverHostname: ${{ secrets.DEPENDENCY_TRACK_HOSTNAME }}
           apiKey: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
